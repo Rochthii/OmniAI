@@ -24,7 +24,7 @@ OmniAI keeps iframes alive in DOM with zero network reload when switching betwee
 3/ If you want to build and ship your own AI browser companion without spending 50+ hours fighting Manifest V3:
 
 Get the full source code on Gumroad:
-👉 [YOUR_GUMROAD_LINK_HERE]
+👉 https://rochthi.gumroad.com/l/omniai-boilerplate
 
 (Early bird $29 for first 20 developers!)
 ```
@@ -51,7 +51,7 @@ Key Technical Feats:
 
 I packaged the entire TypeScript + React 18 codebase into a ready-to-ship boilerplate with a complete step-by-step rebrand & publishing guide.
 
-Check it out here: [YOUR_GUMROAD_LINK_HERE]
+Check it out here: https://rochthi.gumroad.com/l/omniai-boilerplate
 
 Happy to answer any questions about Chrome MV3 side panel quirks and iframe embedding!
 ```
@@ -77,7 +77,7 @@ Mình vừa hoàn thiện một template Chrome Extension Manifest V3 dạng Sid
 
 Mình đã đóng gói toàn bộ Source Code TypeScript sạch sẽ + Tài liệu hướng dẫn Custom & Rebrand từ A-Z để anh em có thể tự build extension riêng nộp lên Chrome Web Store trong 10 phút.
 
-🔗 Link Gumroad: [LINK_GUMROAD_CỦA_BẠN]
+🔗 Link Gumroad: https://rochthi.gumroad.com/l/omniai-boilerplate
 (Ưu đãi Early Bird $29 cho anh em dev)
 
 Anh em có câu hỏi nào về kỹ thuật Chrome Side Panel API hay Manifest V3 cứ comment bên dưới mình cùng trao đổi nhé! 🔥
