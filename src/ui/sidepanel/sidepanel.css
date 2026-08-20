@@ -1,0 +1,619 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #111114;
+  color: #f4f4f5;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.omniai-sidepanel-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #111114;
+  position: relative;
+  /* ✅ GPU-only: opacity + transform, NO filter:blur (too expensive, causes paint) */
+  animation: omniai-sidepanel-entrance 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: opacity, transform;
+}
+
+@keyframes omniai-sidepanel-entrance {
+  0% {
+    opacity: 0;
+    transform: translate3d(16px, 0, 0) scale(0.995);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* Top Navigation Bar */
+.omniai-sidepanel-topbar {
+  height: 40px;
+  min-height: 40px;
+  background: #18181d;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+  gap: 6px;
+  user-select: none;
+  z-index: 10;
+  /* ✅ Chỉ opacity, không cần thêm animation riêng — container đã handle entrance */
+}
+
+.omniai-sidepanel-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex: 1;
+}
+
+.omniai-sidepanel-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.omniai-sidepanel-tab {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #a1a1aa;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: grab;
+  white-space: nowrap;
+  /* ✅ Explicit properties only — avoid transition:all (causes layout thrashing) */
+  transition: background 0.1s ease, color 0.1s ease, opacity 0.1s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+
+.omniai-sidepanel-tab:active {
+  cursor: grabbing;
+}
+
+.omniai-tab-drag-handle {
+  color: #52525b;
+  font-size: 10px;
+  opacity: 0.6;
+  margin-right: -2px;
+}
+
+.omniai-sidepanel-tab:hover .omniai-tab-drag-handle {
+  opacity: 1;
+  color: #a1a1aa;
+}
+
+.omniai-tab-close {
+  font-size: 10px;
+  color: #71717a;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 2px;
+  opacity: 0.6;
+  transition: all 0.1s ease;
+}
+
+.omniai-tab-close:hover {
+  background: rgba(239, 68, 68, 0.3);
+  color: #f87171;
+  opacity: 1;
+}
+
+.omniai-sidepanel-tab:hover {
+  background: #27272a;
+  color: #fafafa;
+}
+
+.omniai-sidepanel-tab.active {
+  background: #2563eb;
+  border-color: #3b82f6;
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(37, 99, 235, 0.3);
+}
+
+.omniai-sidepanel-tab.active .omniai-tab-close {
+  color: #bfdbfe;
+}
+.omniai-sidepanel-tab.active .omniai-tab-close:hover {
+  background: rgba(0, 0, 0, 0.3);
+  color: #ffffff;
+}
+
+/* Dragging States */
+.omniai-sidepanel-tab.is-dragging {
+  opacity: 0.35;
+  border: 1px dashed #60a5fa;
+  transform: scale(0.95);
+}
+
+.omniai-sidepanel-tab.is-drag-over {
+  border-color: #60a5fa;
+  background: rgba(37, 99, 235, 0.2);
+  transform: translateX(4px);
+}
+
+.omniai-sidepanel-actions {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.omniai-icon-btn {
+  background: transparent;
+  border: none;
+  color: #a1a1aa;
+  padding: 4px 6px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.12s;
+}
+
+.omniai-icon-btn:hover {
+  background: #27272a;
+  color: #ffffff;
+}
+
+
+/* Add custom site dropdown form */
+
+.omniai-sidepanel-add-form {
+  padding: 8px 12px;
+  background: #1c1c22;
+  border-bottom: 1px solid #27272a;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: omniai-slide-down 0.15s ease-out;
+  z-index: 10;
+}
+
+@keyframes omniai-slide-down {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.omniai-sidepanel-add-form input {
+  background: #121215;
+  border: 1px solid #3f3f46;
+  color: #f4f4f5;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  outline: none;
+}
+
+.omniai-sidepanel-add-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.omniai-sidepanel-add-buttons button[type="submit"] {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  cursor: pointer;
+}
+
+.omniai-sidepanel-add-buttons button[type="button"] {
+  background: #27272a;
+  color: #a1a1aa;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  cursor: pointer;
+}
+
+.omniai-sidepanel-close-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+/* Stacked Web Frame Container (GPU Accelerated) */
+.omniai-sidepanel-frame-container {
+  flex: 1;
+  width: 100%;
+  height: calc(100% - 40px);
+  position: relative;
+  background: #09090b;
+  transform: translateZ(0);
+}
+
+.omniai-frame-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity 0.2s cubic-bezier(0.22, 1, 0.36, 1), transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.omniai-frame-wrapper:not(.is-active) {
+  opacity: 0;
+  transform: scale(0.992) translateZ(0);
+  pointer-events: none;
+  visibility: hidden;
+  z-index: 1;
+}
+
+.omniai-frame-wrapper.is-active {
+  opacity: 1;
+  transform: scale(1) translateZ(0);
+  pointer-events: auto;
+  visibility: visible;
+  z-index: 2;
+}
+
+.omniai-sidepanel-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #ffffff;
+}
+
+/* Skeleton Loading State */
+.omniai-skeleton-loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #141418;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #a1a1aa;
+  font-size: 13px;
+  z-index: 5;
+  animation: omniai-fade-in 0.2s ease-out;
+}
+
+.omniai-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: omniai-spin 0.6s linear infinite;
+}
+
+@keyframes omniai-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Toast alert inside SidePanel */
+.omniai-sidepanel-toast {
+  position: absolute;
+  top: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(24, 24, 30, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(59, 130, 246, 0.45);
+  color: #f4f4f5;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 500;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 12px rgba(37, 99, 235, 0.3);
+  z-index: 1000;
+  pointer-events: none;
+  animation: omniai-toast-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes omniai-toast-in {
+  from { opacity: 0; transform: translate(-50%, -8px) scale(0.96); }
+  to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+}
+
+/* Settings Drawer Overlay */
+.omniai-settings-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 200;
+  display: flex;
+  justify-content: flex-end;
+  animation: omniai-backdrop-fade 0.2s ease-out;
+}
+
+@keyframes omniai-backdrop-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.omniai-settings-drawer {
+  width: 100%;
+  max-width: 380px;
+  height: 100%;
+  background: #18181d;
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  flex-direction: column;
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.7);
+  animation: omniai-drawer-slide 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+@keyframes omniai-drawer-slide {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.omniai-settings-header {
+  height: 48px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.omniai-settings-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #f4f4f5;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.omniai-saved-badge {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 10px;
+  border: 1px solid rgba(52, 211, 153, 0.3);
+}
+
+.omniai-close-drawer-btn {
+  background: transparent;
+  border: none;
+  color: #a1a1aa;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.omniai-close-drawer-btn:hover {
+  color: white;
+}
+
+.omniai-settings-nav {
+  display: flex;
+  background: #121215;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 4px 8px;
+  gap: 4px;
+}
+
+.omniai-nav-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #a1a1aa;
+  padding: 6px 4px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.omniai-nav-btn:hover {
+  color: #fafafa;
+}
+
+.omniai-nav-btn.active {
+  background: #27272a;
+  color: #60a5fa;
+  font-weight: 600;
+}
+
+.omniai-settings-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px;
+}
+
+.omniai-settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.omniai-setting-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.omniai-setting-label-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.omniai-item-title {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #f4f4f5;
+}
+
+.omniai-item-desc {
+  font-size: 11px;
+  color: #71717a;
+  line-height: 1.4;
+}
+
+.omniai-setting-item-column {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.omniai-select {
+  background: #121215;
+  border: 1px solid #3f3f46;
+  color: #f4f4f5;
+  padding: 7px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  outline: none;
+}
+
+.omniai-cache-box {
+  margin-top: 10px;
+  padding: 12px;
+  background: #121215;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.omniai-clear-btn {
+  background: #27272a;
+  color: #f87171;
+  border: 1px solid #3f3f46;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.omniai-clear-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #ef4444;
+}
+
+/* Prompt customizer */
+.omniai-prompt-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.omniai-prompt-field label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #d4d4d8;
+}
+
+.omniai-prompt-field textarea {
+  background: #121215;
+  border: 1px solid #3f3f46;
+  color: #f4f4f5;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  resize: vertical;
+  outline: none;
+  font-family: inherit;
+}
+
+/* Blacklist domains */
+.omniai-blacklist-form {
+  display: flex;
+  gap: 6px;
+}
+
+.omniai-blacklist-form input {
+  flex: 1;
+  background: #121215;
+  border: 1px solid #3f3f46;
+  color: #f4f4f5;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  outline: none;
+}
+
+.omniai-blacklist-form button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  cursor: pointer;
+}
+
+.omniai-domain-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.omniai-domain-chip {
+  background: #27272a;
+  border: 1px solid #3f3f46;
+  color: #e4e4e7;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.omniai-chip-del {
+  color: #71717a;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.omniai-chip-del:hover {
+  color: #f87171;
+}

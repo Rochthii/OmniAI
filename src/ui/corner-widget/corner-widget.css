@@ -1,0 +1,84 @@
+.omniai-corner-dock {
+  position: fixed !important;
+  right: 0px !important;
+  top: 50% !important;
+  transform: translate3d(0, -50%, 0) !important;
+  will-change: transform, opacity !important;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+  z-index: 2147483647 !important;
+  cursor: grab !important;
+  user-select: none !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  pointer-events: auto !important;
+  touch-action: none !important;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1) !important;
+  opacity: 1 !important;
+}
+
+/* Sleep / Ghost Mode: Smoothly tucked into the edge with only 6px edge exposed */
+.omniai-corner-dock.is-sleeping {
+  transform: translate3d(calc(100% - 6px), -50%, 0) !important;
+  opacity: 0.4 !important;
+}
+
+/* Awake on Hover: Slide out gently & full visibility with spring-like physics */
+.omniai-corner-dock:hover,
+.omniai-corner-dock:hover.is-sleeping {
+  transform: translate3d(0, -50%, 0) !important;
+  opacity: 1 !important;
+}
+
+/* Dragging State: Instant 0ms movement without transition lag */
+.omniai-corner-dock.is-dragging {
+  cursor: grabbing !important;
+  transition: none !important;
+  opacity: 1 !important;
+  transform: translate3d(0, -50%, 0) !important;
+}
+
+.omniai-corner-handle {
+  background: linear-gradient(135deg, #181820 0%, #0d0d14 100%) !important;
+  border: 1px solid rgba(59, 130, 246, 0.45) !important;
+  border-right: none !important;
+  border-radius: 16px 0 0 16px !important;
+  padding: 6px 8px 6px 11px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  color: #ffffff !important;
+  box-shadow: -2px 3px 12px rgba(0, 0, 0, 0.4), 0 0 8px rgba(37, 99, 235, 0.25) !important;
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.omniai-corner-dock:hover .omniai-corner-handle,
+.omniai-corner-dock.is-dragging .omniai-corner-handle {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+  border-color: #93c5fd !important;
+  box-shadow: -4px 5px 20px rgba(37, 99, 235, 0.55), 0 0 14px rgba(96, 165, 250, 0.45) !important;
+}
+
+.omniai-corner-svg {
+  width: 12px !important;
+  height: 12px !important;
+  color: #60a5fa !important;
+  display: inline-block !important;
+  flex-shrink: 0 !important;
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), color 0.2s ease !important;
+}
+
+.omniai-corner-dock:hover .omniai-corner-svg,
+.omniai-corner-dock.is-dragging .omniai-corner-svg {
+  color: #ffffff !important;
+  transform: scale(1.1) !important;
+}
+
+.omniai-corner-text {
+  font-size: 11.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.5px !important;
+  color: #ffffff !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) !important;
+}
+
+
