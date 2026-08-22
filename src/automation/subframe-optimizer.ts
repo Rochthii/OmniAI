@@ -2,6 +2,12 @@
 // Injected into subframes at document_start to allow ChatGPT, Claude, Gemini, DeepSeek, Qwen to render seamlessly
 
 (function () {
+  // CRITICAL GUARD: Only run inside iframe / subframes (Side Panel)!
+  // Never modify layout or styles when user opens AI sites in regular top-level browser tabs.
+  if (window.self === window.top) {
+    return;
+  }
+
   // 1. Anti-Frame-Busting: Inject script into the page's Main World
   // Bypasses `window.top !== window.self` detection that causes ChatGPT/Gemini/Claude to halt or blank out
   try {
